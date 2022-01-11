@@ -8,13 +8,16 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { rows, columns } from "./appData";
+import { useNavigate } from "react-router";
 
-export default function StickyHeadTable() {
+const StickyHeadTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleOnRowClick = (row) => {
-    console.log("payload", row);
+  let navigate = useNavigate();
+
+  const handleOnRowClick = (payload) => {
+    navigate(`/invoice/edit/${payload}`);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -26,7 +29,7 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: "93vh" }}>
+      <TableContainer sx={{ maxHeight: "92vh" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -36,7 +39,7 @@ export default function StickyHeadTable() {
                   align={column.align}
                   style={{ maxWidth: column.maxWidth }}
                 >
-                  {column.label}
+                  {column.label !== "image" && column.label}
                 </TableCell>
               ))}
             </TableRow>
@@ -52,7 +55,7 @@ export default function StickyHeadTable() {
                     tabIndex={-1}
                     key={row.id}
                     value={row}
-                    onClick={handleOnRowClick}
+                    onClick={() => handleOnRowClick(row.id)}
                   >
                     {columns.map((column) => {
                       const value = row[column.id];
@@ -62,15 +65,7 @@ export default function StickyHeadTable() {
                           className="ellipsis"
                           style={{ maxWidth: column.maxWidth }}
                         >
-                          {column.label === "image" ? (
-                            <img
-                              className="productImg"
-                              src={value}
-                              alt="productImg"
-                            />
-                          ) : (
-                            value
-                          )}
+                          {column.label !== "image" && value}
                         </TableCell>
                       );
                     })}
@@ -91,4 +86,6 @@ export default function StickyHeadTable() {
       />
     </Paper>
   );
-}
+};
+
+export default StickyHeadTable;
