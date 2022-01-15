@@ -7,17 +7,27 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { rows, columns } from "./appData";
+import { columns } from "./appData";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useEffect } from "react";
+import productsDataProvider from "../../service/products";
 
-const StickyHeadTable = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const StickyHeadTable = (props) => {
+  const {changeRoute} = props 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+      productsDataProvider.getproducts().then((res) => {
+        setRows(res.data);
+      });
+  }, []);
 
   let navigate = useNavigate();
 
   const handleOnRowClick = (payload) => {
-    navigate(`/invoice/edit/${payload}`);
+    navigate(`/${changeRoute}/edit/${payload}`);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -29,7 +39,7 @@ const StickyHeadTable = () => {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: "92vh" }}>
+      <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
