@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Add from "./components/Add";
-import Edit from "./components/Edit";
+import Product from "./components/Product";
 import "./components/design/css/main.css";
 import List from "./components/list/List";
 import Navbar from "./components/layout/Navbar";
@@ -14,16 +13,16 @@ const routes = [
   },
   {
     path: "/Products",
-    main: () => <List />,
+    main: () => <List changeRoute="product" />,
   },
   {
-    path: "/invoice/add",
+    path: "/product/add",
     exact: true,
-    main: () => <Add />,
+    main: () => <Product />,
   },
   {
-    path: "/invoice/edit/:id",
-    main: () => <Edit />,
+    path: "/product/edit/:id",
+    main: () => <Product />,
   },
 ];
 function App() {
