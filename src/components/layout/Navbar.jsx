@@ -12,11 +12,19 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { navbar } from "../design/css/navbar.styles";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles(navbar);
+
 
 const pages = ["Home", "Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Navbar = (props) => {
+
+      const classes = useStyles();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -100,7 +108,11 @@ const Navbar = (props) => {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
-                <Link key={page} to={page != "Home" ? page : "/"}>
+                <Link
+                  key={page}
+                  to={page != "Home" ? page : "/"}
+                  className={classes.appBarLink}
+                >
                   <Button
                     key={page}
                     onClick={handleCloseNavMenu}
