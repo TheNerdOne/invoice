@@ -1,53 +1,13 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router";
-import { rows } from "./list/appData";
+import React, { useContext } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useFormik } from "formik";
-import * as yup from "yup";
 import { Box } from "@mui/system";
+import { productContext } from "./context/productContext";
 
-const validationSchema = yup.object({
-  id: yup.number("Enter just number").required("id is required"),
-  title: yup.string("Enter just title").required("title is required"),
-  price: yup.number("Enter just number").required("price is required"),
-  description: yup
-    .string("Enter your description")
-    .min(20, "description should be of minimum 20 characters length")
-    .required("description is required"),
-  image: yup.string("enter the url"),
-  category: yup.string("enter the category"),
-});
 const Edit = () => {
-  let urlParams = useParams();
-  const [selectedRow, setselectedRow] = useState({});
-  useEffect(() => {
-    let temp; 
-    if(urlParams.id) {
-       temp = rows.find((r) => r.id === Number(urlParams.id));
-      setselectedRow(temp);
-    } else {
-      temp = {
-        id:0,
-        title:'',
-        price:0,
-        category:'',
-        description:'',
-        image:''
-      }
-      setselectedRow(temp);
-    }
-  }, []);
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: selectedRow,
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      setselectedRow(values);
-      console.log(values);
-    },
-  });
+  const context = useContext(productContext);
+  const { formik } = context;
+
   return (
     <div>
       <Box
@@ -65,18 +25,6 @@ const Edit = () => {
         }}
       >
         <form onSubmit={formik.handleSubmit}>
-          <TextField
-            fullWidth
-            key="id"
-            id="id"
-            name="id"
-            label="id"
-            value={formik.values.id}
-            onChange={formik.handleChange}
-            style={{ margin: "15px 0" }}
-            error={formik.touched.id && Boolean(formik.errors.id)}
-            helperText={formik.touched.id && formik.errors.id}
-          />
           <TextField
             fullWidth
             key="title"

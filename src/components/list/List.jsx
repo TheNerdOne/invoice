@@ -10,19 +10,16 @@ import TableRow from "@mui/material/TableRow";
 import { columns } from "./appData";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { useEffect } from "react";
-import productsDataProvider from "../../service/products";
+import { useContext } from "react";
+import { productContext } from "../context/productContext";
 
 const StickyHeadTable = (props) => {
   const {changeRoute} = props 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setRows] = useState([]);
-  useEffect(() => {
-      productsDataProvider.getproducts().then((res) => {
-        setRows(res.data);
-      });
-  }, []);
+
+  const context = useContext(productContext);
+  const {products} = context 
 
   let navigate = useNavigate();
 
@@ -55,7 +52,7 @@ const StickyHeadTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
@@ -88,7 +85,7 @@ const StickyHeadTable = (props) => {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={products.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
