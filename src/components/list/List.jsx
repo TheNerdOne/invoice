@@ -7,14 +7,24 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { rows, columns } from "./appData";
+import { columns } from "./appData";
+import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useContext } from "react";
+import { productContext } from "../context/productContext";
 
-export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const StickyHeadTable = (props) => {
+  const {changeRoute} = props 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleOnRowClick = (row) => {
-    console.log("payload", row);
+  const context = useContext(productContext);
+  const {products} = context 
+
+  let navigate = useNavigate();
+
+  const handleOnRowClick = (payload) => {
+    navigate(`/${changeRoute}/edit/${payload}`);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -26,7 +36,7 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: "93vh" }}>
+      <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -36,13 +46,13 @@ export default function StickyHeadTable() {
                   align={column.align}
                   style={{ maxWidth: column.maxWidth }}
                 >
-                  {column.label}
+                  {column.label !== "image" && column.label}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
@@ -52,7 +62,7 @@ export default function StickyHeadTable() {
                     tabIndex={-1}
                     key={row.id}
                     value={row}
-                    onClick={handleOnRowClick}
+                    onClick={() => handleOnRowClick(row.id)}
                   >
                     {columns.map((column) => {
                       const value = row[column.id];
@@ -62,15 +72,7 @@ export default function StickyHeadTable() {
                           className="ellipsis"
                           style={{ maxWidth: column.maxWidth }}
                         >
-                          {column.label === "image" ? (
-                            <img
-                              className="productImg"
-                              src={value}
-                              alt="productImg"
-                            />
-                          ) : (
-                            value
-                          )}
+                          {column.label !== "image" && value}
                         </TableCell>
                       );
                     })}
@@ -83,7 +85,7 @@ export default function StickyHeadTable() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={products.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -91,4 +93,6 @@ export default function StickyHeadTable() {
       />
     </Paper>
   );
-}
+};
+
+export default StickyHeadTable;
