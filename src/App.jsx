@@ -1,32 +1,44 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-import Add from "./components/Add";
-import Edit from "./components/Edit";
+import Product from "./components/Product";
 import "./components/design/css/main.css";
 import List from "./components/list/List";
 import Navbar from "./components/layout/Navbar";
-const routes = [
-  {
-    path: "/",
-    exact: true,
-    main: () => <h2>Home</h2>,
-  },
-  {
-    path: "/Products",
-    main: () => <List />,
-  },
-  {
-    path: "/invoice/add",
-    exact: true,
-    main: () => <Add />,
-  },
-  {
-    path: "/invoice/edit/:id",
-    main: () => <Edit />,
-  },
-];
+import ProductGlobalState from "./components/context/productGlobalState";
+
 function App() {
+  const routes = [
+    {
+      path: "/",
+      exact: true,
+      main: () => <h2>Home</h2>,
+    },
+    {
+      path: "/Products",
+      main: () => (
+        <ProductGlobalState>
+          <List changeRoute="product" />
+        </ProductGlobalState>
+      ),
+    },
+    {
+      path: "/product/add",
+      exact: true,
+      main: () => (
+        <ProductGlobalState>
+          <Product />
+        </ProductGlobalState>
+      ),
+    },
+    {
+      path: "/product/edit/:id",
+      main: () => (
+        <ProductGlobalState>
+          <Product />
+        </ProductGlobalState>
+      ),
+    },
+  ];
   return (
     <React.Fragment>
       <Navbar />
