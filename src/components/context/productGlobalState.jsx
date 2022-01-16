@@ -24,24 +24,6 @@ const ProductGlobalState = ({ children }) => {
   let Navigate = useNavigate();
 
   useEffect(() => {
-    if (urlParams.id) {
-      productsDataProvider.getSingleProduct(urlParams.id).then((res) => {
-        setselectedRow(res.data);
-      });
-    } else {
-      let temp = {
-        id: products.length,
-        title: "",
-        price: 0,
-        category: "",
-        description: "",
-        image: "",
-      };
-      setselectedRow(temp);
-    }
-  }, [urlParams.id]);
-
-  useEffect(() => {
     productsDataProvider.getproducts().then((res) => {
       setproducts(res.data);
     });
@@ -86,6 +68,7 @@ const ProductGlobalState = ({ children }) => {
       value={{
         formik,
         products,
+        setselectedRow
       }}
     >
       {children}

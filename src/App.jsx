@@ -16,26 +16,21 @@ function App() {
     {
       path: "/Products",
       main: () => (
-        <ProductGlobalState>
+        
           <List changeRoute="product" />
-        </ProductGlobalState>
       ),
     },
     {
       path: "/product/add",
       exact: true,
       main: () => (
-        <ProductGlobalState>
           <Product />
-        </ProductGlobalState>
       ),
     },
     {
       path: "/product/edit/:id",
       main: () => (
-        <ProductGlobalState>
           <Product />
-        </ProductGlobalState>
       ),
     },
   ];
@@ -48,7 +43,11 @@ function App() {
             key={index}
             path={route.path}
             exact={route.exact}
-            element={<route.main />}
+            element={
+              <ProductGlobalState>
+                <route.main />
+              </ProductGlobalState>
+            }
           />
         ))}
       </Routes>

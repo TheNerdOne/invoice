@@ -1,13 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Box } from "@mui/system";
 import { productContext } from "./context/productContext";
+import { useParams } from "react-router";
 
 const Edit = () => {
   const context = useContext(productContext);
-  const { formik } = context;
+  const { formik, products, setselectedRow } = context;
+  let urlParams = useParams();
 
+  useEffect(() => {
+    let temp;
+    if (urlParams.id) {
+      temp = products.find((product) => product.id === Number(urlParams.id));
+      setselectedRow(temp);
+    } else {
+      temp = {
+        id: products.length + 1,
+        title: "",
+        price: 0,
+        category: "",
+        description: "",
+        image: "",
+      };
+      setselectedRow(temp);
+    }
+  }, [urlParams.id]);
   return (
     <div>
       <Box
